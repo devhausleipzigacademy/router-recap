@@ -1,7 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  LoaderFunction,
+  RouterProvider,
+} from "react-router-dom";
 import { RootLayout } from "./layouts/root";
 import { Home } from "./routes/home";
 import { Blog } from "./layouts/blog";
@@ -15,6 +19,16 @@ export async function blogLoader() {
     posts,
   };
 }
+
+const postLoader: LoaderFunction = async ({ params }) => {
+  const response = await fetch(
+    `https://jsonplaceholder.org/posts/${params.id}`
+  );
+  const post: PostType = await response.json();
+  return {
+    post,
+  };
+};
 
 const router = createBrowserRouter([
   {
@@ -37,6 +51,7 @@ const router = createBrowserRouter([
           {
             path: ":id",
             element: <Post />,
+            loader: postLoader,
           },
         ],
       },

@@ -7,7 +7,7 @@ type LoaderData = Awaited<ReturnType<typeof blogLoader>>;
 export function Blog() {
   const { posts } = useLoaderData() as LoaderData;
   return (
-    <div className="flex">
+    <div className="flex h-full">
       <Sidebar posts={posts} />
       <Outlet />
     </div>
