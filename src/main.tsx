@@ -4,13 +4,13 @@ import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { RootLayout } from "./layouts/root";
 import { Home } from "./routes/home";
-import { Blog } from "./routes/blog";
-import { Post } from "./utils/types";
+import { Blog } from "./layouts/blog";
+import { Post as PostType } from "./utils/types";
+import { Post } from "./routes/post";
 
-async function blogLoader() {
+export async function blogLoader() {
   const response = await fetch("https://jsonplaceholder.org/posts");
-  const posts: Post[] = await response.json();
-  console.log(posts);
+  const posts: PostType[] = await response.json();
   return {
     posts,
   };
@@ -29,6 +29,16 @@ const router = createBrowserRouter([
         path: "blog",
         element: <Blog />,
         loader: blogLoader,
+        children: [
+          {
+            index: true,
+            element: <p className="flex-1">Please select a Post</p>,
+          },
+          {
+            path: ":id",
+            element: <Post />,
+          },
+        ],
       },
     ],
   },
